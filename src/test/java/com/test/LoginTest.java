@@ -24,6 +24,7 @@ public class LoginTest {
 
     private String login;
     private String password;
+    private String url = "http://www.e-katalog.ru/";
 
     @BeforeTest
     private void setUp() {
@@ -41,13 +42,13 @@ public class LoginTest {
         }
     }
 
-    @Test
+    @Test(description = "Login test")
     public void simpleTest() {
         //System.setProperty("webdriver.chrome.driver", "/resources/chromedriver.exe");
         WebDriver driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 
-        driver.get("http://www.e-katalog.ru/");
+        driver.get(url);
         WebElement loginTab = driver.findElement(By.className("wu_entr"));
         loginTab.click();
         (new WebDriverWait(driver, 10))
@@ -59,6 +60,6 @@ public class LoginTest {
         String current = driver.findElement(By.className("info-nick")).getText();
         Assert.assertEquals(current, login);
         driver.findElement(By.className("help2")).click();
-        //driver.quit();
+        driver.quit();
     }
 }
