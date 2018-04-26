@@ -1,5 +1,6 @@
 package com.test;
 
+import io.qameta.allure.Attachment;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,6 +14,7 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -24,7 +26,7 @@ public class LoginTest {
 
     private String login;
     private String password;
-    private String url = "http://www.e-katalog.ru/";
+    private String url;
 
     @BeforeTest
     private void setUp() {
@@ -37,6 +39,7 @@ public class LoginTest {
 
             login = properties.getProperty("login");
             password = properties.getProperty("password");
+            url = properties.getProperty("url");
         } catch (IOException e) {
             LOGGER.error("Cannot load properties file.");
         }
@@ -44,7 +47,9 @@ public class LoginTest {
 
     @Test(description = "Login test")
     public void simpleTest() {
-        //System.setProperty("webdriver.chrome.driver", "/resources/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + File.separator + "src" +
+                File.separator + "test" + File.separator + "resources" + File.separator + "binaries" +
+            File.separator + "chromedriver.exe");
         WebDriver driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 
@@ -61,5 +66,10 @@ public class LoginTest {
         Assert.assertEquals(current, login);
         driver.findElement(By.className("help2")).click();
         driver.quit();
+    }
+
+    @Attachment(value = "Page screenshot", type = "image/png")
+    public byte[] saveScreenshot(byte[] screenShot) {
+        return screenShot;
     }
 }
