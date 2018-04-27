@@ -1,5 +1,6 @@
 package com.test;
 
+import com.test.base.BaseClass;
 import io.qameta.allure.Attachment;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -20,7 +22,7 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-public class LoginTest {
+public class LoginTest extends BaseClass {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(LoginTest.class);
 
@@ -28,31 +30,16 @@ public class LoginTest {
     private String password;
     private String url;
 
+    @Parameters({"login", "password", "url"})
     @BeforeTest
-    private void setUp() {
-        FileInputStream fis;
-        Properties properties = new Properties();
-
-        try {
-            fis = new FileInputStream("app.properties");
-            properties.load(fis);
-
-            login = properties.getProperty("login");
-            password = properties.getProperty("password");
-            url = properties.getProperty("url");
-        } catch (IOException e) {
-            LOGGER.error("Cannot load properties file.");
-        }
+    private void setUp(String login, String password, String url) {
+        this.login = login;
+        this.password = password;
+        this.url = url;
     }
 
     @Test(description = "Login test")
     public void simpleTest() {
-        System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + File.separator + "src" +
-                File.separator + "test" + File.separator + "resources" + File.separator + "binaries" +
-            File.separator + "chromedriver.exe");
-        WebDriver driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-
         driver.get(url);
         WebElement loginTab = driver.findElement(By.className("wu_entr"));
         loginTab.click();
