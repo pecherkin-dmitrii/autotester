@@ -49,6 +49,10 @@ public class BaseClass {
         driver.findElement(By.className("help2")).click();
     }
 
+    protected void waitUntilVisibilityOf(int seconds, WebElement element) {
+        new WebDriverWait(driver, seconds).until(ExpectedConditions.visibilityOf(element));
+    }
+
     @AfterClass
     protected void close() {
         if (driver != null) {
