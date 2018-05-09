@@ -1,6 +1,9 @@
 package com.test.base;
 
+import io.qameta.allure.Attachment;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -20,8 +23,7 @@ public class BaseClass {
     private final static String DRIVER_PROPERTY_NAME = "webdriver.chrome.driver";
 
     private String url = "http://www.e-katalog.ru/";
-    private String password = "testPassword0987";
-    protected String login = "testLogin111";
+    private TakesScreenshot screenshotMaker;
     protected WebDriver driver;
 
     @BeforeClass
@@ -29,13 +31,14 @@ public class BaseClass {
         System.setProperty(DRIVER_PROPERTY_NAME, DRIVER_PROPERTY_PATH);
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        screenshotMaker = (TakesScreenshot) driver;
     }
 
     protected void openMainPage() {
         driver.get(url);
     }
 
-    protected void logIn() {
+    protected void logIn(String login, String password) {
         WebElement loginTab = driver.findElement(By.className("wu_entr"));
         loginTab.click();
         (new WebDriverWait(driver, 10))
@@ -51,6 +54,11 @@ public class BaseClass {
 
     protected void waitUntilVisibilityOf(int seconds, WebElement element) {
         new WebDriverWait(driver, seconds).until(ExpectedConditions.visibilityOf(element));
+    }
+
+    @Attachment(value = "Page shot")
+    protected byte[] saveScreenshot() {
+        return screenshotMaker.getScreenshotAs(OutputType.BYTES);
     }
 
     @AfterClass

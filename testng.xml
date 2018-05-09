@@ -1,16 +1,21 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <suite name="Suite1" verbose="1" >
-    <test name="Login test" >
+    <test name="E-katalog test" >
+        <parameter name="login" value="testLogin111"/>
+        <parameter name="password" value="testPassword0987"/>
+        <parameter name="price" value="1000"/>
+
+        <groups>
+            <dependencies>
+                <group name="other" depends-on="init"/>
+            </dependencies>
+        </groups>
+
         <classes>
             <class name="com.test.LoginTest" />
+            <class name="com.test.CameraFindingTest"/>
+            <class name="com.test.TabletFindingTest"/>
         </classes>
     </test>
-
-    <!--<test name="Regression1">-->
-        <!--<classes>-->
-            <!--<class name="com.test.LoginTest"/>-->
-            <!--<class name="com.test.LoginTest"/>-->
-        <!--</classes>-->
-    <!--</test>-->
 </suite>
